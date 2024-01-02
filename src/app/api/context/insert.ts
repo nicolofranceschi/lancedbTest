@@ -2,7 +2,7 @@ import { connect, OpenAIEmbeddingFunction } from 'vectordb';
 import { getDomObjects } from './scrape';
 import crypto from 'crypto';
 
-export async function createEmbeddingsTable(url: string, pages: number) {
+export async function createEmbeddingsTable(url: string, pages: number | undefined) {
   const db = await connect('/tmp/website-lancedb')
   // You need to provide an OpenAI API key, here we read it from the OPENAI_API_KEY environment variable
   const apiKey = process.env.OPENAI_API_KEY ?? ''
@@ -15,7 +15,6 @@ export async function createEmbeddingsTable(url: string, pages: number) {
   const embedFunction = new OpenAIEmbeddingFunction('context', apiKey)
   const data = contextualize(await getDomObjects(url, pages), 5, 'link')
   const batchSize = 500;
-  console.log('Vectors inserted: ', data.slice(0, Math.min(batchSize, data.length)).length)
   const tbl = await db.createTable(`website-${hash}`, data.slice(0, Math.min(batchSize, data.length)), embedFunction)
   for (var i = batchSize; i < data.length; i += batchSize) {
     await tbl.add(data.slice(i, Math.min(i + batchSize, data.length)))

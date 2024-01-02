@@ -11,6 +11,6 @@ export async function retrieveContext(query: string, table: string) {
   return await tbl
     .search(query)
     .select(['link', 'text', 'context'])
-    .limit(3)
+    .limit(10)
     .execute()
 }

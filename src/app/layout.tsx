@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'LanceDB Website ChatBot Template',
-  description: 'Use an AI chatbot with website context retrieved from a vector store like LanceDB',
+  title: 'Baby Cinzia - AI Chatbot',
+  description: 'Use an AI chatbot with website context',
 }
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="it">
       <body className={inter.className}>{children}</body>
     </html>
   )

@@ -5,7 +5,7 @@ interface Entry {
   text: string;
 }
 
-async function getWebsiteSitemap(url: string, pages: number): Promise<string[]> {
+async function getWebsiteSitemap(url: string, pages: number | undefined): Promise<string[]> {
   const response = await fetch(url);
   const $ = load(await response.text());
 
@@ -13,7 +13,7 @@ async function getWebsiteSitemap(url: string, pages: number): Promise<string[]> 
     .map((index: number, element: Element) => $(element).text().trim())
     .get();
 
-  return sitemapLinks.slice(0, pages);
+  return pages ? sitemapLinks.slice(0, pages) : sitemapLinks;
 }
 
 async function getEntriesFromLinks(links: string[]): Promise<Entry[]> {
@@ -45,8 +45,9 @@ async function getEntriesFromLinks(links: string[]): Promise<Entry[]> {
   return allEntries;
 }
 
-export async function getDomObjects(url: string, pages: number): Promise<Entry[]> {
+export async function getDomObjects(url: string, pages: number | undefined): Promise<Entry[]> {
   const sitemapUrls = await getWebsiteSitemap(url, pages);
+  console.log('Sitemap URLs:', sitemapUrls);
   const allEntries = await getEntriesFromLinks(sitemapUrls);
   return allEntries;
 }

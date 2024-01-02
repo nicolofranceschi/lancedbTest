@@ -1,9 +1,10 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export default function Form({ state, setState }: { state: MainState, setState: Dispatch<SetStateAction<MainState>> }) {
-  const [input, setInput] = useState('')
+  
+  
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const websiteBase = state.website.split('/')[2]
@@ -29,20 +30,20 @@ export default function Form({ state, setState }: { state: MainState, setState: 
     <form className="w-full mb-5" onSubmit={handleWebsiteSubmit}>
       <div className="flex flex-col md:flex-row md:w-3/4 md:space-x-2">
         <div className="basis-1/2 w-full">
-          <label htmlFor="website" className="block mb-2 text-md font-medium text-gray-900">Website sitemap</label>
+          <label htmlFor="website" className="block mb-2 text-md font-medium text-gray-900">Website sitemap url</label>
           <input value={state.website}
             onChange={e => setState({ ...state, website: e.target.value })} className="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="https://nextjs.org/sitemap.xml" required />
         </div>
         <div className="basis-1/2 w-full">
           <label htmlFor="pages" className="block mb-2 text-md font-medium text-gray-900">Pages to load</label>
           <ul className="mb-2 flex justify-start md:flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-            {[1,3,5].map(pageNum => (
+            {[1,3,5, undefined].map(pageNum => (
               <li key={pageNum} className="mr-2">
                 <button onClick={e => {
                   e.preventDefault()
                   setState({ ...state, pages: pageNum })
                 }} className={`inline-block px-4 py-3 ${state.pages == pageNum ? 'text-white bg-lancedb rounded-lg' : 'rounded-lg hover:text-gray-900 hover:bg-gray-100'}`}>
-                  {pageNum} {pageNum == 1 ? 'page' : 'pages'}
+                  {pageNum} {pageNum == undefined ? 'all ' : null}{pageNum == 1 ? 'page' : 'pages'}
                 </button>
               </li>
             ))}
@@ -50,7 +51,7 @@ export default function Form({ state, setState }: { state: MainState, setState: 
         </div>
       </div>
       <div className="mb-2 flex flex-row  bg-blue space-x-2 items-center">
-        <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-lancedb rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none">
+        <button className="inline-flex mt-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-lancedb rounded-lg hover:bg-opacity-80 focus:ring-4 focus:outline-none">
           Load and start chatting
           <svg className="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1 5h12m0 0L9 1m4 4L9 9" />

@@ -5,6 +5,7 @@ import { useEffect, Dispatch, SetStateAction } from 'react'
 import Message from './Message'
 
 export default function Chat({ state, setState }: { state: MainState, setState: Dispatch<SetStateAction<MainState>> }) {
+
   const { messages, input, handleInputChange, handleSubmit } = useChat({ body: { table: state.table } })
   const websiteBase = state.website.split('/')[2]
 
@@ -43,25 +44,7 @@ export default function Chat({ state, setState }: { state: MainState, setState: 
           </button>
         </form>
       </div>
-      <div className="flex flex-row justify-center w-full px-6">
-        <div className="flex bg-white py-2 fixed bottom-3 w-full flex-col md:flex-row justify-center items-center mx-6 md:space-x-1">
-          <p className="text-gray-500 text-sm text-center">
-            Built with
-            <a href="https://nextjs.org" target="_blank" className="ml-1 mr-1 inline-flex items-center font-medium text-lancedb hover:underline">Next.js</a>
-            and
-            <a href="https://vercel.com/blog/introducing-the-vercel-ai-sdk" target="_blank" className="ml-1 mr-1 inline-flex items-center font-medium text-lancedb hover:underline">Vercel AI SDK</a>
-            with
-            <a href="https://lancedb.com" target="_blank" className="ml-1 mr-1 inline-flex items-center font-medium text-lancedb hover:underline">LanceDB</a>
-            as vector store.
-          </p>
-            <a href="https://github.com/lancedb/lancedb-vercel-chatbot" target="_blank" className="ml-1 text-sm inline-flex items-center font-medium text-lancedb hover:underline">
-              Visit chatbot repo
-              <svg className="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-              </svg>
-            </a>
-        </div>
-      </div>
+   
     </div>
   )
 }
