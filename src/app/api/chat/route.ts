@@ -14,8 +14,10 @@ export const runtime = 'edge'
 export async function POST(req: Request) {
   // Extract the `messages` from the body of the request
   const { messages, table } = await req.json()
+
+  console.log(`${process.env.URL}/api/retrieve`)
   
-  const context = await fetch(`${process.env.VERCEL_URL}/api/retrieve`, {
+  const context = await fetch(`${process.env.URL}/api/retrieve`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: messages[messages.length - 1].content, table })
