@@ -5,6 +5,5 @@ export async function POST(req: Request) {
   // Extract the `messages` from the body of the request
   const { query, table } = await req.json()
   const context = await retrieveContext(query, table)
-  console.log(context)
   return NextResponse.json(context)
 }

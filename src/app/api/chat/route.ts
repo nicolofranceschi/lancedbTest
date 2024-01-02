@@ -14,13 +14,13 @@ export const runtime = 'edge'
 export async function POST(req: Request) {
   // Extract the `messages` from the body of the request
   const { messages, table } = await req.json()
-
-  const baseUrl = process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:3000'
-  const context = await fetch(`${baseUrl}/api/retrieve`, {
+  
+  const context = await fetch(`${process.env.VERCEL_URL}/api/retrieve`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: messages[messages.length - 1].content, table })
   })
+
   messages[messages.length - 1].content = createPrompt(messages[messages.length - 1].content, (await context.json()) as EntryWithContext[])
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.createChatCompletion({
