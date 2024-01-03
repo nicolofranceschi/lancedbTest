@@ -12,8 +12,8 @@ export default function Home() {
 
   const [state, setState] = useState<MainState>({
     chat: false,
-    pages: 3,
-    website: "https://www.pineappsrl.com/sitemap.xml",
+    level: 0,
+    website: "https://www.pineappsrl.com",
     table: '',
   })
 

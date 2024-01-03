@@ -1,6 +1,6 @@
 interface MainState {
   chat: boolean,
-  pages: number | undefined,
+  level: number | undefined,
   website: string,
   table: string,
 }

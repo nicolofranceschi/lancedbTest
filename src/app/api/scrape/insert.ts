@@ -1,10 +1,10 @@
-import { connect, OpenAIEmbeddingFunction } from 'vectordb';
 import { getDomObjects } from './scrape';
+import { connect, OpenAIEmbeddingFunction } from 'vectordb';
 import crypto from 'crypto';
 
 
+export async function createEmbeddingsTable(url: string, level: number) {
 
-export async function createEmbeddingsTable(url: string, pages: number | undefined) {
   const db = await connect('/tmp/website-lancedb')
   // You need to provide an OpenAI API key, here we read it from the OPENAI_API_KEY environment variable
   const apiKey = process.env.OPENAI_API_KEY ?? ''
@@ -15,17 +15,24 @@ export async function createEmbeddingsTable(url: string, pages: number | undefin
 
   // The embedding function will create embeddings for the 'context' column
   const embedFunction = new OpenAIEmbeddingFunction('context', apiKey)
-  const data = contextualize(await getDomObjects(url, pages), 5, 'link')
+  
+  const { entries: domObjects , links , error } = await getDomObjects(url, level, [], [url], url,[],[])
+  console.log('Links: ', links)
+  console.log('Error: ', error)
+
+
+  const data = contextualize(domObjects, 5, 'link')
   const batchSize = 500;
+  console.log('Vectors inserted: ', data.length)
+
   const tbl = await db.createTable(`website-${hash}`, data.slice(0, Math.min(batchSize, data.length)), embedFunction)
   for (var i = batchSize; i < data.length; i += batchSize) {
     await tbl.add(data.slice(i, Math.min(i + batchSize, data.length)))
   }
   return tbl.name
+
 }
 
-// Each article line has a small text column, we include previous lines in order to
-// have more context information when creating embeddings
 function contextualize(rows: Entry[], contextSize: number, groupColumn: string): EntryWithContext[] {
   const grouped: { [key: string]: any } = []
   rows.forEach(row => {
@@ -45,3 +52,4 @@ function contextualize(rows: Entry[], contextSize: number, groupColumn: string):
   })
   return data
 }
+

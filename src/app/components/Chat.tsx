@@ -26,7 +26,6 @@ export default function Chat({ state, setState }: { state: MainState, setState: 
           <h5 className="mb-2 text-2xl font-semibold tracking-tight text-lancedb">Enter a message to learn more about <span>{websiteBase}</span>.</h5>
           <p className="font-normal text-gray-700 ">By using a vector store, we can retrieve relevant up-to-date information for use in chat completion. </p>
         </div>
-
       )}
       <div className="flex flex-row justify-center w-full">
         <form className="flex fixed bottom-20 md:bottom-14 w-full px-6 md:px-44 lg:px-56 flex-row justify-center space-x-2" onSubmit={e => {

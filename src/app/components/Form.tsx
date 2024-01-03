@@ -3,8 +3,8 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 
 export default function Form({ state, setState }: { state: MainState, setState: Dispatch<SetStateAction<MainState>> }) {
-  
-  
+
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const websiteBase = state.website.split('/')[2]
@@ -13,10 +13,10 @@ export default function Form({ state, setState }: { state: MainState, setState: 
     e.preventDefault()
     setLoading(true)
     setError('')
-    const response = await fetch("/api/context", {
+    const response = await fetch("/api/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: state.website, pages: state.pages, })
+      body: JSON.stringify({ url: state.website, level: state.level, })
     })
     if (response?.ok) {
       const table = (await response.json()).table
@@ -26,6 +26,7 @@ export default function Form({ state, setState }: { state: MainState, setState: 
     }
     setLoading(false)
   }
+
   return (
     <form className="w-full mb-5" onSubmit={handleWebsiteSubmit}>
       <div className="flex flex-col md:flex-row md:w-3/4 md:space-x-2">
@@ -34,19 +35,33 @@ export default function Form({ state, setState }: { state: MainState, setState: 
           <input value={state.website}
             onChange={e => setState({ ...state, website: e.target.value })} className="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="https://nextjs.org/sitemap.xml" required />
         </div>
-        <div className="basis-1/2 w-full">
-          <label htmlFor="pages" className="block mb-2 text-md font-medium text-gray-900">Pages to load</label>
-          <ul className="mb-2 flex justify-start md:flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-            {[1,3,5, undefined].map(pageNum => (
-              <li key={pageNum} className="mr-2">
-                <button onClick={e => {
-                  e.preventDefault()
-                  setState({ ...state, pages: pageNum })
-                }} className={`inline-block px-4 py-3 ${state.pages == pageNum ? 'text-white bg-lancedb rounded-lg' : 'rounded-lg hover:text-gray-900 hover:bg-gray-100'}`}>
-                  {pageNum} {pageNum == undefined ? 'all ' : null}{pageNum == 1 ? 'page' : 'pages'}
-                </button>
-              </li>
-            ))}
+        <div className="w-full">
+          <label htmlFor="pages" className="block mb-2 text-md font-medium text-gray-900">Livello di profondità</label>
+          <ul className="mb-2 flex flex-wrap justify-start whitespace-nowrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <li className="mr-2">
+              <button onClick={e => {
+                e.preventDefault()
+                setState({ ...state, level: 0 })
+              }} className={`inline-block px-4 py-3 ${state.level == 0 ? 'text-white bg-lancedb rounded-lg' : 'rounded-lg hover:text-gray-900 hover:bg-gray-100'}`}>
+                Solo la pagina
+              </button>
+            </li>
+            <li className="mr-2">
+              <button onClick={e => {
+                e.preventDefault()
+                setState({ ...state, level: 1 })
+              }} className={`inline-block px-4 py-3 ${state.level == 1 ? 'text-white bg-lancedb rounded-lg' : 'rounded-lg hover:text-gray-900 hover:bg-gray-100'}`}>
+                Ricerca profonda
+              </button>
+            </li>
+            <li className="mr-2">
+              <button onClick={e => {
+                e.preventDefault()
+                setState({ ...state, level: 2 })
+              }} className={`inline-block px-4 py-3 ${state.level == 2 ? 'text-white bg-lancedb rounded-lg' : 'rounded-lg hover:text-gray-900 hover:bg-gray-100'}`}>
+                Fossa delle marianne
+              </button>
+            </li>
           </ul>
         </div>
       </div>
@@ -60,7 +75,7 @@ export default function Form({ state, setState }: { state: MainState, setState: 
 
         {loading ? (
           <div className="p-2 text-sm text-lancedb rounded-lg bg-lancedb bg-opacity-10" role="alert">
-            Loading {state.pages} {state.pages === 1 ? 'page': 'pages'} from {websiteBase} into LanceDB. This may take a few seconds...
+            Loading data from {websiteBase} into LanceDB. This may take a few seconds...
           </div>
         ) : null}
 
